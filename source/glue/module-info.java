@@ -1,0 +1,3 @@
+module glue {
+    exports cli;
+}

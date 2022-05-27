@@ -1,0 +1,3 @@
+module options {
+    exports opts;
+}

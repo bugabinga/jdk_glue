@@ -1,0 +1,17 @@
+{
+    "java.project.sourcePaths": [
+        "source/glue",
+        "source/options",
+    ],
+    "java.project.resourceFilters": [
+        "node_modules",
+        ".git",
+        /* VSCode uses Eclipse JDT under the hood, which needs a 1:1 relationship between a "Java Project" and a JPMS module.
+         * When it detects multiple `module-info.java` files in the source path it complains.
+         * As a workaround, `module-info.java` files are ignored, so VSCode will use the CLASSPATH.
+         * This means, the rules of the MODULEPATH will have to be enforced by the build system.
+         */
+        "module-info.java",
+    ],
+    "java.project.outputPath": "output",
+}
