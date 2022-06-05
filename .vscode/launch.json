@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch build",
+            "request": "launch",
+            "mainClass": "build",
+            "projectName": "jdk_glue_2351d601"
+        },
+        {
+            "type": "java",
             "name": "Launch CommandLineInterface",
             "request": "launch",
             "mainClass": "cli.CommandLineInterface",

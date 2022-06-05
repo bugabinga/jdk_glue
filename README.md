@@ -4,6 +4,8 @@ DSL/script language for combining JDK tools.
 
 ## Example
 
+Start the exploration with some idealized, wishful pseudo code.
+
 ```java
 requires java.base // integrate module-info.java
 
@@ -26,7 +28,6 @@ javac(
     "-d", output_modules
 )
 
-
 javadoc(
     "-Werror",
     "-locale", "de",
@@ -48,8 +49,11 @@ java(
     "--module-path", output_modules,
     main
 )
-// same as
-new ProcessBuilder("java").start()
+// semantically same as:
+new ProcessBuilder()
+.command("java", "--show-version", "--source", java_version, "--module-path", output_modules, main)
+.inheritIO()
+.start()
 
 jwebserver(
     "--bind-address", "127.0.0.1",
@@ -59,14 +63,51 @@ jwebserver(
 
 // System tools ?
 
-git(
-    "git", "rev-list", "--count", "--first-parent", "HEAD"
+var commit_count = git(
+    "rev-list", "--count", "--first-parent", "HEAD"
 )
-
+for( int index = 0; index <= Integer.parse(commit_count); ++index )
+{
+    echo("Yay ", index);
+}
 
 ```
 
-- Can semicolons be omitted?
+## Experiments
+
+### JShell
+
+_JShell_ has a way to handle script files without semicolons.
+
+```java
+/open PRINTING
+println("START")
+
+var ps = new ProcessBuilder().
+command( "ps", "aux").
+inheritIO().
+start()
+
+//nothing gets printed, despite `inheritIO`
+
+new ProcessBuilder().
+command("nu", "--commands", "sleep 2sec ; echo love").
+start().
+onExit().
+thenApply(Process::inputReader).
+thenApply(BufferedReader::lines).
+thenApply(lines -> lines.collect(Collectors.joining())).
+thenAccept(System.out::println).
+join()
+
+// prints "love"
+
+/exit
+```
+
+> Note the `.` (dot) on some ends of lines. These are necessary so that the_JShell_ parser knows to continue to parse the expression over multiple lines.
+
+_JShell_ seems to interfere a little in regards to standard streams.
 
 ## Ideas
 
